@@ -1,0 +1,1 @@
+About learning computer vision
