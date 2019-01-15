@@ -14,13 +14,26 @@ namespace
 		std::vector<unsigned char> img(n * 4);
 		const float* p = mat.ptr();
 		unsigned char* data = img.data();
-		REP(i, n) {
-			data[0] = static_cast<unsigned char>((p[0] < 0 ? 1 : p[0]) * 255);
-			data[1] = static_cast<unsigned char>((p[1] < 0 ? 1 : p[1]) * 255);
-			data[2] = static_cast<unsigned char>((p[2] < 0 ? 1 : p[2]) * 255);
-			data[3] = 255;
-			data += 4; p += 3;
+
+		if (mat.channels() == 3)
+		{
+			REP(i, n) {
+				data[0] = static_cast<unsigned char>((p[0] < 0 ? 1 : p[0]) * 255);
+				data[1] = static_cast<unsigned char>((p[1] < 0 ? 1 : p[1]) * 255);
+				data[2] = static_cast<unsigned char>((p[2] < 0 ? 1 : p[2]) * 255);
+				data[3] = 255;
+				data += 4; p += 3;
+			}
 		}
+		else
+		{
+			REP(i, n) {
+				data[0] = data[1] = data[2] = static_cast<unsigned char>((p[i] < 0 ? 1 : p[i]) * 255);
+				data[3] = 255;
+				data += 4; 
+			}
+		}
+
 		unsigned error = lodepng::encode(fname, img, mat.width(), mat.height());
 		if (error)
 			error_exit(utils::ssprintf(
@@ -80,20 +93,31 @@ namespace imgproc
 		return mat;
 	}
 
-	void write_rgb(const char * fname, const Matf & mat)
+	void save_img(const char * fname, const Matf & mat)
 	{
-		ASSERT(mat.channels() == 3);
 		if (utils::endswith(fname, ".png")) {
 			write_png(fname, mat);
 			return;
 		}
-		cimg_library::CImg<unsigned char> img(mat.cols(), mat.rows(), 1, 3);
-		REP(i, mat.rows())
-			REP(j, mat.cols()) {
-			img(j, i, 0) = static_cast<unsigned char>((mat.at(i, j, 0) < 0 ? 1 : mat.at(i, j, 0)) * 255);
-			img(j, i, 1) = static_cast<unsigned char>((mat.at(i, j, 1) < 0 ? 1 : mat.at(i, j, 1)) * 255);
-			img(j, i, 2) = static_cast<unsigned char>((mat.at(i, j, 2) < 0 ? 1 : mat.at(i, j, 2)) * 255);
+
+		cimg_library::CImg<unsigned char> img(mat.cols(), mat.rows(), 1, mat.channels());
+		if (mat.channels() == 3)
+		{
+			REP(i, mat.rows())
+				REP(j, mat.cols()) {
+				img(j, i, 0) = static_cast<unsigned char>((mat.at(i, j, 0) < 0 ? 1 : mat.at(i, j, 0)) * 255);
+				img(j, i, 1) = static_cast<unsigned char>((mat.at(i, j, 1) < 0 ? 1 : mat.at(i, j, 1)) * 255);
+				img(j, i, 2) = static_cast<unsigned char>((mat.at(i, j, 2) < 0 ? 1 : mat.at(i, j, 2)) * 255);
+			}
 		}
+		else
+		{
+			REP(i, mat.rows())
+				REP(j, mat.cols()) {
+				img(j, i, 0) = static_cast<unsigned char>((mat.at(i, j, 0) < 0 ? 1 : mat.at(i, j, 0)) * 255);
+			}
+		}
+
 		img.save(fname);
 	}
 }

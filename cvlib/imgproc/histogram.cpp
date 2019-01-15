@@ -14,6 +14,7 @@ namespace imgproc
 		}
 		return ret;
 	}
+
 	std::vector<float> ProbabilityDensityFunction(const Matf& mat)
 	{
 		ASSERT(mat.channels() == 1);
@@ -25,6 +26,7 @@ namespace imgproc
 
 		return ret;
 	}
+
 	std::vector<float> CumulativeDistributionFunction(const Matf& mat,float & cdf_min)
 	{
 		ASSERT(mat.channels() == 1);
@@ -39,6 +41,7 @@ namespace imgproc
 		}
 		return ret;
 	}
+
 	Matf HistogramEqualization(const Matf& mat)
 	{
 		ASSERT(mat.channels() == 1);
@@ -61,6 +64,7 @@ namespace imgproc
 		}
 		return ret;
 	}
+
 	void HistogramDisplay(const std::vector<int>& histogram)
 	{
 		int hist_w = 1024, hist_h = 720;

@@ -1,5 +1,6 @@
 #ifndef CVCRAYON_IMGPROC_IMGPROC_H
 #define CVCRAYON_IMGPROC_IMGPROC_H
+#include <vector>
 
 #include "mat.h"
 #include "color.h"
@@ -22,6 +23,12 @@ namespace imgproc
 	*/
 	void Fill(Matf& mat, const Color& c);
 	void Fill(Matf& mat, const float& c);
+
+	/*
+	* Bit Plane
+	* https://en.wikipedia.org/wiki/Bit_plane
+	*/
+	std::vector<Matf> BitPlane(const Matf& mat);
 
 }
 

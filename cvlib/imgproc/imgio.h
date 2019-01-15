@@ -6,7 +6,7 @@
 namespace imgproc
 {
 	Matf read_img(const char* fname);
-	void write_rgb(const char* fname, const Matf& mat);
+	void save_img(const char* fname, const Matf& mat);
 }
 
 #endif //CVCRAYON_IMGPROC_IMGIO_H
